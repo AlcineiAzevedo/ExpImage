@@ -1,19 +1,15 @@
 Package: ExpImage
 Type: Package
-Title: ExpImage: Pacote Para Analise de Imagens em Experimentos
-Version: 0.2.0
-Author: Author: person(given = "Alcinei Mistico",
-           family = "Azevedo",
-           role = c("aut", "cre"),
-           email = "alcineimistico@hotmail.com",
-           comment = c(ORCID = "0000-0001-5196-0851"), 
-           Youtube: "https://www.youtube.com/channel/UCDGyvLCJnv9RtTY1YMBMVNQ")
-Maintainer: Alcinei Mistico Azevedo <alcineimistico@hotmail.com>
-Description: Este e um pacote destinado a analise de imagens. Possibilita fazer varias manipuacoes em imagens e obter informacoes biometricas e dados colorimetricos.
+Title: ExpImage - Pacote Para Analise de Imagens em Experimentos
+Version: 0.2.2
+Author: Who wrote it
+Maintainer: The package maintainer <yourself@somewhere.net>
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
 Imports: EBImage
-biocViews:
-License: GPL (>= 3)
+URL: https://github.com/AlcineiAzevedo/ExpImage
+License: What license is it under?
 Encoding: UTF-8
-Language: pt-BR
 LazyData: true
 RoxygenNote: 7.1.1
+NeedsCompilation: no
