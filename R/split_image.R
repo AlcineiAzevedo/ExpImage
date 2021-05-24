@@ -122,7 +122,7 @@ split_image=function(im,Seg,noise=0,CutImage=T,lim=10,tolerance=0,
                     "s.radius.sd", "s.radius.min", "s.radius.max","m.majoraxis",
                     "m.eccentricity"," m.theta")
   RES=RES[RES[,3]>noise,]
-  print(noise)
+ # print(noise)
 
   rownames(RES)=1:nrow(RES)
 
