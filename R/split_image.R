@@ -73,7 +73,7 @@ split_image=function(im,Seg,noise=0,CutImage=T,lim=10,tolerance=0,
   SegplotR=SegplotG=SegplotB=SepSeg*0
   for(j in 2:length(unique(c(SepSeg)))){
     i=unique(c(SepSeg))[j]
-    if((sum(SepSeg==i)<=noise)){print(sum(SepSeg==i))}
+    #if((sum(SepSeg==i)<=noise)){print(sum(SepSeg==i))}
     if(sum(SepSeg==i)>noise){
       #print(sum(SepSeg==i))
       a=a+1
