@@ -2,9 +2,9 @@
 % Please edit documentation in R/resize_image.R
 \name{resize_image}
 \alias{resize_image}
-\title{uncao permite mudar o tamanho da imagem.}
+\title{Function to change image size (Funcao para mudar o tamanho da imagem)}
 \usage{
-resize_image(im, w, h,plot=T)
+resize_image(im, w, h,plot=TRUE)
 }
 \arguments{
 \item{im}{:Este objeto deve conter uma imagem no formato do EBImage ou na
@@ -29,19 +29,19 @@ Esta funcao permite mudar o tamanho de uma imagem, modificando o
   peso ocupado na memoria e em sua resolucao.
 }
 \examples{
-\dontrun{
+\donttest{
 
 #Carregar imagem de exemplo
-im=readImage(example_image(1))
+im=read_image(example_image(1))
 ##mostrar imagem
-plot(im)
+plot_image(im)
 
 
 ##Diminuir a resolucao (tamanho da imagem)
-im2=resize_image(im,w=1000,plot=T)
+im2=resize_image(im,w=1000,plot=TRUE)
 
 ##Cortar Imagem
-im3=crop_image(im2,w =200:750,h=100:650,plot = T)
+im3=crop_image(im2,w =200:750,h=100:650,plot = TRUE)
 
 ##Aumentar brilho
 im4=edit_image(im3,brightness = 0.1)
@@ -57,7 +57,7 @@ im6=edit_image(im5,gamma  = 1.1)
 imb=edit_image(im3,brightness = 0.1,contrast = 1.7,gamma  = 1.2)
 
 #Mostrando ambas as imagens simultaneamente.
-plot(combine(im3,imb),all=T)
+join_image(im3,imb)
 }
 }
 \seealso{

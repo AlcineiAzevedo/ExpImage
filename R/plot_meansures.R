@@ -1,9 +1,10 @@
-#' uncao sobrepor informacoes sobre os objetos da imagem
+#' Funcao para sobrepor informacoes sobre os objetos da imagem
 #'
 #' @description Esta funcao possibilita sobrepor informacoes sobre os objetos da
 #'   imagem
 #' @usage
-#' plot_meansures(img,coordx,coordy,text,col="red",cex=1,pathSave="none",plot=F)
+#' plot_meansures(img,coordx=NULL,coordy=NULL,text=NULL,measurements=NULL,
+#' variable=NULL,pch=NULL,col="red",cex=1,pathSave="none",plot=F)
 #'
 #' @param img    :Este objeto deve conter uma imagem no formato do EBImage.
 #' @param coordx    : deve ser um vetor com as coordenadas do eixo x dos
@@ -12,9 +13,27 @@
 #'   objetos.
 #' @param text    : deve ser um vetor com as informacoes (numeros ou texto) a
 #'   serem sobrepostos em cada objeto.
+#' @param measurements : Objeto obtido pela funcao `measure_image`.
+#' @param variable : Pode ser um nome associado a uma das variaveis estimadas pela
+#' funcao `measure_image`:
+#' \itemize{ \item "id" = Identificacao dos objetos.
+#'  \item "area" = Area dos objetos.
+#'   \item "perimeter" = Perimetro dos objetos.
+#'    \item "radius.mean" = Raio medio.
+#'     \item "radius.sd" = Desvio padrao dos objetos.
+#'      \item "radius.min" = Raio minimo dos objetos.
+#'       \item "radius.max" = Raio maximo dos objetos.
+#'        \item "major.axis" = Maior eixo dos objetos.
+#'         \item "eccentricity" = Excentrecidade dos objetos.
+#'          \item "theta" = Angulo theta dos objetos.
+#'          }
+
+#' @param pch : Podem ser valores numericos indicando diferentes simbolos.
 #' @param col    : E a cor do texto que pretende-se colocar sobre a imagem
 #' @param cex    : E o tamanho do texto que pretende-se colocar sobre a imagem
 #' @param pathSave    : Se tiver preenchido por "none" nao sera salva a imagem
+#'
+#'
 #'   resultante (default). Alternativamente, basta colocar o nome de um objeto
 #'   (com extensao .jpg) que a imagem sera salva na pasta de trabalho.
 #' @param plot    :Indica se sera apresentada (TRUE) ou nao (FALSE) (default) a
@@ -24,36 +43,36 @@
 #' @seealso  \code{\link{segmentation_logit}}
 
 #' @examples
-#'\dontrun{
+#' \donttest{
 #' ####################################################################################
 #' #Estimar a area foliar usando um objeto de referencia.
 #' ###################################################################################
 #'   #ativar pacote
-#'   library(EBImage)
-#'   library(ExpImage)
+#'   #library(EBImage)
+#'   #library(ExpImage)
 #'   #######################################################
 #'   #Abrir imagem das folhas
-#'   im=readImage(example_image(3))
-#'   plot(im)
+#'   im=read_image(example_image(3))
+#'   plot_image(im)
 #'   #Abrir paleta de cores do fundo
-#'   fundo=readImage(example_image(4))
-#'   plot(fundo)
+#'   fundo=read_image(example_image(4))
+#'   plot_image(fundo)
 #'   #Abrir paleta de cores das folhas
-#'   folhas=readImage(example_image(5))
-#'   plot(folhas)
+#'   folhas=read_image(example_image(5))
+#'   plot_image(folhas)
 #'   #Abrir paleta de cores referencia
-#'   ref=readImage(example_image(6))
+#'   ref=read_image(example_image(6))
 #'   #Ver a imagem
-#'   plot(ref)
+#'   plot_image(ref)
 #'
 #'   #################################################################
 #'   #Segmentacao para separar as folhas do restante
 #'   folhas.seg=segmentation_logit(im,foreground=folhas,background=list(fundo,ref),
-#'   sample=2000,fillHull=TRUE,plot=T)
+#'   sample=2000,fillHull=TRUE,plot=TRUE)
 #'
 #'   #Segmentacao para separar o objeto de referencia do restante
 #'   ref.seg=segmentation_logit(im,foreground=ref,background=list(fundo,folhas),
-#'   sample=2000,fillHull=TRUE,plot=T)
+#'   sample=2000,fillHull=TRUE,plot=TRUE)
 #'
 #'   #Identificar area de cada folha
 #'
@@ -62,8 +81,9 @@
 #'   medidas
 #'
 #'   #Plotar resultados das areas em pixel e salvar em imagem jpg
-#'   plot_meansures(im,medidas$measures[,1],coordy=medidas$measures[,2],
-#'   text=round(medidas$measures[,3],1),col="blue",cex = 0.9,pathSave ="teste.jpg" ,plot=T)
+#'   #plot_meansures(im,medidas$measures[,1],coordy=medidas$measures[,2],
+#'   #text=round(medidas$measures[,3],1),col="blue",cex = 0.9,
+#'   #pathSave ="teste.jpg" ,plot=TRUE)
 #'
 
 #'
@@ -84,22 +104,43 @@
 #'  plot_meansures(im,medidasref$measures[,1],coordy=medidasref$measures[,2],
 #'  text=round(medidasref$measures[,3],2),cex = 0.9,col="blue")
 #'  }
+#'@export
 
 
 
+plot_meansures=function(img,
+                        coordx=NULL,coordy=NULL,text=NULL,measurements=NULL,
+                        variable=NULL,pch=NULL,
+                        col="red",cex=1,pathSave="none",plot=F){
 
-plot_meansures=function(img,coordx,coordy,text,col="red",cex=1,pathSave="none",plot=F){
-  plot(as.Image(img))
-  text(coordx,coordy,text,col=col,cex=cex)
+if(!is.null(measurements)){
+   class(measurements)="measurements"
+  coordx=measurements$measures[,1]
+  coordy=measurements$measures[,2]
+  if(!is.null(variable)){
+  if(variable!="id"){text2=measurements$measures[,variable]}
+  if(variable=="id"){text2=rownames(measurements$measures)}
+}
+}
+
+  if(!is.null(text)){text2=text}
+
+
+  plot_image(EBImage::as.Image(img))
+  if(is.null(text)&is.null(variable)){
+    points(coordx,coordy,pch=pch,col=col,cex=cex)
+  }
+
+  if(!is.null(text)|!is.null(variable)){text(coordx,coordy,text2,col=col,cex=cex)}
 
   if(pathSave!="none"){
     jpeg(pathSave)
-    plot(as.Image(img))
+    plot( EBImage::as.Image(img))
     text(coordx,coordy,text,col=col,cex=cex)
     dev.off()
 
     if(plot==T){
-    plot(as.Image(img))
+    plot_image(EBImage::as.Image(img))
     text(coordx,coordy,text,col=col,cex=cex)
 }
 

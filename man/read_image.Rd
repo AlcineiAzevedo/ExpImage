@@ -2,27 +2,25 @@
 % Please edit documentation in R/read_image.R
 \name{read_image}
 \alias{read_image}
-\title{Funcao permite abrir uma imagem.}
+\title{Function to import an image (Funcao para importa uma imagem).}
 \usage{
-read_image(file,plot=F)
+read_image(file,plot=FALSE)
 }
 \arguments{
 \item{file}{:Nome do arquivo ou endereco da imagem.}
 
 \item{plot}{:Indica se sera apresentada (TRUE) ou nao (FALSE) (default) a
-imagem editada}
+imagem}
 }
 \value{
-Abre uma imagem.
+Importa uma imagem.
 }
 \description{
-Esta função abre uma imagem.
+Esta funcao importa uma imagem.
 }
 \examples{
-\dontrun{
 #Carregar imagem de exemplo
-im=read_image(example_image(1),plot=T)
-}
+im=read_image(example_image(1),plot=TRUE)
 }
 \seealso{
 \code{\link{crop_image}} , \code{\link{edit_image}}

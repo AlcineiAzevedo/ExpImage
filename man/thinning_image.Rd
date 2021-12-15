@@ -2,9 +2,9 @@
 % Please edit documentation in R/thinning_image.R
 \name{thinning_image}
 \alias{thinning_image}
-\title{Esta funcao faz o thinning em imagens.}
+\title{This function makes the thinning images(Esta funcao faz o thinning em imagens).}
 \usage{
-thinning_image(x,plot=F)
+thinning_image(x,plot=FALSE)
 }
 \arguments{
 \item{x}{:Este objeto deve conter uma imagem em uma matriz binaria.}
@@ -18,9 +18,10 @@ Retorna uma imagem com o thinning dos objetos.
 Esta funcao permite fazer o thinning em imagens.
 }
 \examples{
-\dontrun{
-library(ExpImage.pt)
-}
+im=read_image(example_image(10),plot=TRUE)
+im2=segmentation(im@.Data[,,1],plot = TRUE)
+T1=skeletonize_image(im2,plot = TRUE)
+T2=thinning_image(im2,plot = TRUE)
 }
 \seealso{
 \code{\link{thinning_image}}

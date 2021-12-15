@@ -2,9 +2,10 @@
 % Please edit documentation in R/skeletonize_image.R
 \name{skeletonize_image}
 \alias{skeletonize_image}
-\title{Esta funcao faz a skeletonizacao em imagens.}
+\title{Function for skeletonization in images (Esta funcao faz a skeletonizacao em
+imagens).}
 \usage{
-skeletonize_image(x,plot=F)
+skeletonize_image(x,plot=FALSE)
 }
 \arguments{
 \item{x}{:Este objeto deve conter uma imagem em uma matriz binaria.}
@@ -19,9 +20,10 @@ Retorna uma imagem com os objetos skeletonizados.
 Esta funcao permite fazer a skeletonizacao em imagens.
 }
 \examples{
-\dontrun{
-library(ExpImage.pt)
-}
+im=read_image(example_image(10),plot=TRUE)
+im2=segmentation(im@.Data[,,1],plot = TRUE)
+T1=skeletonize_image(im2,plot = TRUE)
+T2=thinning_image(im2,plot = TRUE)
 }
 \seealso{
 \code{\link{thinning_image}}

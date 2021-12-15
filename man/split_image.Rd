@@ -2,51 +2,55 @@
 % Please edit documentation in R/split_image.R
 \name{split_image}
 \alias{split_image}
-\title{Esta funcao divide a imagem em varias outras de acordo com as imagens que
-contem}
+\title{This function splits the image into several others (Esta funcao divide a
+imagem em varias outras de acordo com os objetos que contem)}
 \usage{
-split_image(im,Seg,noise=0,CutImage=T,lim=10,tolerance=0,
-  colorBack=c(0,0,0) ,ext=1,saveImage=T,
+split_image(im,Seg,noise=0,CutImage=TRUE,lim=10,tolerance=1,ext=1,
+  splitConnected=FALSE,colorBack=c(0,0,0) ,saveImage=TRUE,
   plot=T,col="red",cex=1,fileName="test.jpg")
 }
 \arguments{
-\item{im}{:Este objeto deve conter uma imagem no formato do EBImage.}
+\item{im}{Este objeto deve conter uma imagem no formato do EBImage.}
 
-\item{Seg}{: Este objeto deve ser obrigatoriamente uma matriz binaria,
-contendo os valores 0 (pixels do background) ou 1 (pixels do foreground)).}
+\item{Seg}{Este objeto deve ser obrigatoriamente uma matriz binaria, contendo
+os valores 0 (pixels do background) ou 1 (pixels do foreground)).}
 
-\item{noise}{:E o numero de pixeis a partir do qual a funcao nao
-considerara como ruido.}
+\item{noise}{E o numero de pixeis a partir do qual a funcao nao considerara
+como ruido.}
 
-\item{CutImage}{: Se TRUE a imagem ao ser dividida ser cortada, englobando
+\item{CutImage}{Se TRUE a imagem ao ser dividida ser cortada, englobando
 apenas o objeto de interesse}
 
-\item{lim}{: Indica  numero de pixels que sera acrescentada nas bordas da
+\item{lim}{Indica  numero de pixels que sera acrescentada nas bordas da
 imagem cortada}
 
-\item{tolerance}{: The minimum height of the object in the units of image
+\item{tolerance}{The minimum height of the object in the units of image
 intensity between its highest point (seed) and the point where it contacts
 another object (checked for every contact pixel). If the height is smaller
 than the tolerance, the object will be combined with one of its neighbors,
 which is the highest. Tolerance should be chosen according to the range of
 x. Default value is 1, which is a reasonable value if x comes from distmap.}
 
-\item{colorBack}{: Deve ser um vetor com tres valores variando entre 0 a
-1. Estes valores indicam reespectivamente os valores de r, g e b que
-substituirao os pixels indesejados nas imagens divididas.}
-
-\item{ext}{:Radius of the neighborhood in pixels for the detection of
+\item{ext}{Radius of the neighborhood in pixels for the detection of
 neighboring objects. Higher value smoothes out small objects.}
 
-\item{saveImage}{:Se for TRUE serao salvas as imagens dividas.}
+\item{splitConnected}{:Variavel do tipo logico. Se TRUE objetos encostados
+serao considerados diferentes.}
 
-\item{plot}{:Indica se sera apresentada (TRUE) ou nao (FALSE) (default) a
+\item{colorBack}{Deve ser um vetor com tres valores variando entre 0 a 1.
+Estes valores indicam reespectivamente os valores de r, g e b que
+substituirao os pixels indesejados nas imagens divididas.}
+
+\item{saveImage}{Se for TRUE serao salvas as imagens dividas.}
+
+\item{plot}{Indica se sera apresentada (TRUE) ou nao (FALSE) (default) a
 imagem segmentada}
 
-\item{col}{:Indica a cor do numero sobreposto sobre a imagem segmentada
-@param cex    :Indica o tamanho do numero sobrepsosto sobre a imagem segmentada}
+\item{col}{Indica a cor do numero sobreposto sobre a imagem segmentada}
 
-\item{fileName}{:endereco e/ou nome do arquivo a ser salvo com extensao .jpg}
+\item{cex}{Indica o tamanho do numero sobrepsosto sobre a imagem segmentada}
+
+\item{fileName}{endereco e/ou nome do arquivo a ser salvo com extensao .jpg}
 }
 \value{
 Retorna a medida em pixels dos objetos contidos na imagem e varias fotos
@@ -56,20 +60,20 @@ havendo em cada uma um objeto.
 Esta funcao permite dividir a imagem e obter medidas dos objetos
 }
 \examples{
-\dontrun{
+\donttest{
 #remove(list=ls())
 #require(ExpImage)
 #require(EBImage)
-im=readImage(example_image(3))
+im=read_image(example_image(3))
 ##mostrar imagem
 plot(im)
 
-g=gray_scale(im,"g",plot=T)
-Seg=segmentation(img.band = g,treshold = "otsu",selectHigher = F,
-fillHull = T,plot = T)
+g=gray_scale(im,"g",plot=TRUE)
+Seg=segmentation(img.band = g,threshold = "otsu",selectHigher = FALSE,
+fillHull = TRUE,plot = TRUE)
 
-split_image(im=im,Seg=Seg,noise = 200,CutImage = F,tolerance = 1,
-saveImage = F,plot = T,col="blue",cex=2)
+split_image(im=im,Seg=Seg,noise = 200,CutImage = FALSE,tolerance = 1,
+saveImage = FALSE,plot = TRUE,col="blue",cex=2)
 }
 }
 \seealso{

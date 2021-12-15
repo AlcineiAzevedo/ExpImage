@@ -2,65 +2,59 @@
 % Please edit documentation in R/crop_image.R
 \name{crop_image}
 \alias{crop_image}
-\title{Esta funcao corta a imagem retirando as laterais nao desejadas.}
+\title{Esta funcao corta a imagem retirando as laterais nao desejadas. (This function
+removes unwanted sides from the images.)}
 \usage{
-crop_image(im,w,h,plot=TRUE)
+crop_image(im,w=NULL,h=NULL,segmentation=NULL,plot=TRUE,verbose=FALSE)
 }
 \arguments{
-\item{im}{:Este objeto deve conter uma imagem no formato do EBImage.}
+\item{im}{Este objeto deve conter uma imagem no formato do EBImage (This
+object must contain an image in EBImage format).}
 
-\item{w}{: Deve ser um vetor contendo os numeros das colunas que
-permanecerao na imagem.}
+\item{w}{Deve ser um vetor contendo os numeros das colunas que permanecerao na
+imagem (It must be a vector containing the column numbers that will remain
+in the image).}
 
-\item{h}{: Deve ser um vetor contendo os numeros das linhas que
-permanecerao na imagem.}
+\item{h}{Deve ser um vetor contendo os numeros das linhas que permanecerao na
+imagem (It must be a vector containing the numbers of the lines that will
+remain in the image ).}
 
-\item{plot}{:Indica se sera apresentada (TRUE) ou nao (FALSE) (default) a
-imagem segmentada.}
+\item{segmentation}{matrix binaria obtida por uma segmentacao (Binary matrix obtained of a segmentation)}
+
+\item{plot}{Indica se sera apresentada (TRUE) ou nao (FALSE) (default) a
+imagem segmentada (Indicates whether the segmented image will be
+displayed (TRUE) or not (FALSE) (default)).}
+
+\item{verbose}{Indica se sera apresentada (TRUE) ou nao (FALSE) (default) os
+pontos de corte (Indicates whether the segmented image will be
+ displayed (TRUE) or not (FALSE) (default) the points crop).}
 }
 \value{
 Retorna uma imagem cortada, apresentando apenas os  pixels
- selecionados.
+ selecionados (Returns a cropped image showing only selected pixels).
 }
 \description{
-Esta funcao permite cortar a imagem.
+Esta funcao permite cortar a imagem (This function allows you to
+ crop the image).
 }
 \examples{
-\dontrun{
-library(ExpImage.pt)
-library(EBImage)
+#library(ExpImage)
 #Carregar imagem de exemplo
-im=readImage(example_image(1))
-##mostrar imagem
-plot(im)
+im=read_image(example_image(2),plot=TRUE)
 
-
-##Diminuir a resolucao (tamanho da imagem)
-im2=resize_image(im,w=1000,plot=T)
 
 ##Cortar Imagem
-im3=crop_image(im2,w =200:750,h=100:650,plot = T)
 
-##Aumentar brilho
-im4=edit_image(im3,brightness = 0.1)
+im3=crop_image(im,w =286:421,h=242:332,plot = TRUE)
 
-#Aumentar contraste
-im5=edit_image(im4,contrast = 1.2)
-
-#Aumentar gamma
-im6=edit_image(im5,gamma  = 1.1)
-
-
-#Alterando brilho, contraste e gamma
-imb=edit_image(im3,brightness = 0.1,contrast = 1.7,gamma  = 1.2)
-
-#Mostrando ambas as imagens simultaneamente.
-im4=join_image(im3,imb)
+# intefacie grafica
+\dontrun{
+im2=crop_image(im)
 }
 
 }
 \seealso{
-\code{\link{segmentation_logit}}
+\code{\link{edit_image}} ,  \code{\link{edit_imageGUI}}
 }
 \author{
 Alcinei Mistico Azevedo (Instituto de ciencias agrarias da UFMG)
