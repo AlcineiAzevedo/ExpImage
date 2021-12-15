@@ -1,15 +1,25 @@
 Package: ExpImage
 Type: Package
-Title: ExpImage - Pacote Para Analise de Imagens em Experimentos
-Version: 0.2.2
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-Imports: EBImage
-URL: https://github.com/AlcineiAzevedo/ExpImage
-License: What license is it under?
+Title: Tool For Analysis of Images in Experiments 
+Version: 0.4.0
+Authors@R: 
+    person(given = "Alcinei Mistico",
+           family = "Azevedo",
+           role = c("aut", "cre"),
+           email = "alcineimistico@hotmail.com",
+           comment = c(ORCID = "0000-0001-5196-0851"))
+Description: Tools created for image analysis in researches. There are functions associated with image editing, segmentation, and obtaining biometric measurements (Este pacote foi idealizado para para a analise de imagens em pesquisas. Ha funcoes associadas a edicao de imagens, segmentacao, e obtencao de medidas biometricas).
+biocViews:
+Imports: rstudioapi,progress,fields,crayon, doParallel,raster,parallel, foreach
+URL: https://www.youtube.com/channel/UCDGyvLCJnv9RtTY1YMBMVNQ
+License: GPL-3
 Encoding: UTF-8
-LazyData: true
 RoxygenNote: 7.1.1
-NeedsCompilation: no
+Language: pt-BR
+Suggests: 
+    BiocManager,
+    EBImage,
+    knitr,
+    rmarkdown
+VignetteBuilder: 
+    knitr
