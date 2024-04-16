@@ -77,7 +77,8 @@
 #'im3=mask_pixels(im,MatrizSegmentada2==1,plot=TRUE)
 #'}
 
-
+#' @exportS3Method print segmentation
+#'
 segmentation=function(img.band,threshold="otsu",selectHigher=TRUE,fillHull=FALSE,
                       fillBack=FALSE,TargetPixels="all", plot=FALSE,treshold=NULL){
 
@@ -85,8 +86,8 @@ segmentation=function(img.band,threshold="otsu",selectHigher=TRUE,fillHull=FALSE
   #library(EBImage)
   if(isFALSE(is.matrix(TargetPixels))){
     b=(img.band)
-    if(threshold=="otsu"){ts=EBImage::otsu(b);message(
-      paste("The threshold by Otsu melhod is (O valor do limiar pelo etodo otsu e):",round(ts,4)))}
+    if(threshold=="otsu"){ts=EBImage::otsu(b);print(
+      paste("The threshold by Otsu method is (O valor do limiar pelo metodo otsu e):",round(ts,4)))}
     if(threshold!="otsu"){ts=threshold}
     if(isTRUE(selectHigher)){MatrizSegentada=b>ts}
     if(isFALSE(selectHigher)){MatrizSegentada=b<ts}
@@ -96,11 +97,14 @@ segmentation=function(img.band,threshold="otsu",selectHigher=TRUE,fillHull=FALSE
   if(isTRUE(is.matrix(TargetPixels))){
     b=img.band
     if(threshold=="otsu"){ts=suppressWarnings( EBImage::otsu(matrix(b[TargetPixels],ncol=2)))
-    message(paste("The threshold by Otsu melhod is (O valor do limiar pelo etodo otsu e):",round(ts,4)))}
+    print(paste("The threshold by Otsu method is (O valor do limiar pelo metodo otsu e):",round(ts,4)))}
     if(threshold!="otsu"){ts=threshold}
-    MatrizSegentada=TargetPixels*1
+   #MatrizSegentada=TargetPixels*1
     if(isTRUE(selectHigher)){MatrizSegentada=b>ts}
-    if(isFALSE(selectHigher)){MatrizSegentada=b<ts}  }
+    if(isFALSE(selectHigher)){MatrizSegentada=b<ts}
+
+    MatrizSegentada[TargetPixels==0]=0
+    }
 
 
 
@@ -114,6 +118,15 @@ segmentation=function(img.band,threshold="otsu",selectHigher=TRUE,fillHull=FALSE
 
 
 
-  if(plot==T){plot_image(EBImage::as.Image((MatrizSegentada)))}
+#  if(plot==T){plot_image(EBImage::as.Image((MatrizSegentada)))}
+  if(plot==T){plot(EBImage::as.Image((MatrizSegentada)))}
+  class(MatrizSegentada)="MatrizSegentada"
   return(MatrizSegentada)
 }
+
+
+print.segmentation=function(x,...){
+  cat("Binary matrix (Matriz binaria):")
+  print(x[1:6,1:6])
+}
+

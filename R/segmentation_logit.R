@@ -40,14 +40,52 @@
 #'@author Alcinei Mistico Azevedo (Instituto de Ciencias Agrarias da UFMG)
 #'@export
 #' @examples
-#'\dontrun{
-#'im=read_image(example_image(7),plot=TRUE)
-#'segmentation_logitGUI(im)  }
+
+#'\donttest{
+#'
+#' #################################################################
+#' #Estimar a area foliar usando um objeto de referencia.
+#' ##################################################################
+#'   #ativar pacote
+#'   #library(ExpImage)
+#'   #######################################################
+#'   #Abrir imagem das folhas
+#'   im=read_image(example_image(3))
+#'   plot_image(im)
+#'   #Abrir paleta de cores do fundo
+#'   fundo=read_image(example_image(4))
+#'   plot_image(fundo)
+#'   #Abrir paleta de cores das folhas
+#'   folhas=read_image(example_image(5))
+#'   plot_image(folhas)
+#'   #Abrir paleta de cores referencia
+#'   ref=read_image(example_image(6))
+#'   #Ver a imagem
+#'   plot_image(ref)
+#'
+#'   #################################################################
+#'   #Segmentacao para separar as folhas do restante
+#'   folhas.seg=segmentation_logit(im,foreground=folhas,
+#'   background=list(fundo,ref),sample=2000,fillHull=TRUE,plot=TRUE)
+#'
+#'   #Segmentacao para separar o objeto de referencia do restante
+#'   ref.seg=segmentation_logit(im,foreground=ref,
+#'   background=list(fundo,folhas),sample=2000,fillHull=TRUE,plot=TRUE)
+#'
+#'   #Identificar area de cada folha
+#'
+#'   medidas=measure_image(folhas.seg,noise = 1000)
+#'   #numero de objetos e medias
+#'   medidas
+#'
+#'   #Plotar resultados das areas em pixel e salvar em imagem jpg
+#'   plot_meansures(im,medidas$measures[,1],coordy=medidas$measures[,2],
+#'   text=round(medidas$measures[,3],1),col="blue",cex = 0.9,pathSave ="none" ,plot=TRUE)
+#'   }
 
 
 
-
-segmentation_logit=function(im,foreground,background,return="image", sample=2000,fillHull=TRUE,
+segmentation_logit=function(im=NULL,foreground,background,return="image", sample=2000,fillHull=TRUE,
                             TargetPixels="all",plot=TRUE){
 
 
@@ -106,7 +144,7 @@ segmentation_logit=function(im,foreground,background,return="image", sample=2000
   colnames(back_fore)=c("R","G","B","Y")
   modelo1 <- suppressWarnings(glm(Y ~ R + G + B, family = binomial("logit"),
                                   data = back_fore))
-
+if(!is.null(im)){
 #print(modelo1)
   if(isFALSE(is.matrix(TargetPixels))){
     imagem=data.frame(R=c(im@.Data[,,1]),G=c(im@.Data[,,2]),B=c(im@.Data[,,3]))
@@ -116,6 +154,7 @@ segmentation_logit=function(im,foreground,background,return="image", sample=2000
     ImagemSeg <- matrix(pred1, ncol = ncol(im@.Data[,,1]))
   }
 
+  if(!is.null(im)){
   if(isTRUE(is.matrix(TargetPixels))){
     imagem=data.frame(R=c(im@.Data[,,1][TargetPixels]),G=c(im@.Data[,,2][TargetPixels]),B=c(im@.Data[,,3][TargetPixels]))
     pred1 <- round(predict(modelo1, newdata = imagem, type = "response"), 0)
@@ -129,8 +168,19 @@ segmentation_logit=function(im,foreground,background,return="image", sample=2000
 
 
   ImagemSeg=EBImage::as.Image((ImagemSeg>0)*1)
+}
 
-  if(plot==T){join_image(ImagemSeg,mask_pixels(im,ImagemSeg,Contour = T,col.TargetPixels = "red",plot = F))}
+
+  if((plot==T)&(!is.null(im))){
+    iim=mask_pixels(im = im,TargetPixels = ImagemSeg,
+                    Contour =T,
+                    col.TargetPixels = "red",plot = F)
+    m = (ImagemSeg@.Data>0)*1
+   # print(m)
+    ImagemSeg2=IM3(m)
+    a=join_image(list(im,ImagemSeg2),plot=T)
+  }
+  }
  if(return=="image") {return(ImagemSeg)}
   if(return=="model") {return(modelo1)}
 }

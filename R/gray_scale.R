@@ -4,7 +4,7 @@
 #' @description Function to get a grayscale image from a color image (Esta
 #'   funcao permite a obtencao de uma imagem em escala de cinza a partir de uma
 #'   imagem colorida).
-#' @usage gray_scale(im,method="r",plot=FALSE)
+#' @usage gray_scale(im,method="r",normalize=TRUE,plot=FALSE)
 #' @param im    :This object must contain an image in EBImage format (Este
 #'   objeto deve conter uma imagem no formato do EBImage).
 #' @param method    : Indicates the method for obtaining the gray scale (Este
@@ -38,7 +38,8 @@
 #'    "RGVBI"=(g-(br))/(g^2(br))\cr
 #'    "ExG"=(2*g-r-b)\cr
 #'    "VEG"=(g/(g^0.66667*b^0.66667))\cr
-#'
+#' @param normalize Logic value, if true, the pixel values will be corrected to vary between 0 and 1
+#' (Valor logico, se for verdadeiro os valores dos pixels sera corrigido para variar entre 0 e 1).
 #' @param plot    :This object must contain an image in EBImage format (Indica
 #'   se sera apresentada (TRUE) ou nao (FALSE) (default) a imagem segmentada).
 
@@ -47,7 +48,7 @@
 #' @seealso  \code{\link{segmentation_logit}}
 
 #' @examples
-# \donttest{
+#' \donttest{
 #'#Carregar imagem de exemplo
 #'im=read_image(example_image(2))
 #'##mostrar imagem
@@ -59,18 +60,18 @@
 #'r=gray_scale(im,method = "r",plot=TRUE)
 #'g=gray_scale(im,method = "g",plot=TRUE)
 #'b=gray_scale(im,method = "b",plot=TRUE)
-#}
+#'}
 #'@export
 #' @exportS3Method print gray_scale
 
 
-gray_scale=function(im,method="r",plot=FALSE){
+gray_scale=function(im,method="r",normalize=TRUE,plot=FALSE){
   #Separar a imagem em bandas
 
 
   normatizar=function(MAT){
-    MAT=MAT-min(c(MAT))
-    id=1/max(c(MAT))
+    MAT=MAT-min(c(MAT),na.rm=T)
+    id=1/max(c(MAT),na.rm=T)
     MAT=MAT*id
     return(MAT)
   }
@@ -116,9 +117,17 @@ gray_scale=function(im,method="r",plot=FALSE){
   if(method=="ExG"){imm=(2*g-r-b)}
   if(method=="VEG"){imm=(g/(g^0.66667*b^0.66667))}
 
-  if(plot==T){plot_image(EBImage::as.Image( EBImage::normalize(imm)))}
+#  if(plot==T){plot_image(EBImage::as.Image( EBImage::normalize(imm)),)}
+  if(normalize==TRUE){
+  if(plot==T){plot_image(normalize_image(as_image(imm)))}
+  return(normalize_image(as_image(imm)))
+  }
 
-  return(EBImage::normalize(imm))
+  if(normalize==FALSE){
+    if(plot==T){plot(EBImage::as.Image( (imm)),)}
+    return((imm))
+  }
+
 
 }
 

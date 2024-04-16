@@ -47,7 +47,6 @@
 #'\donttest{
 #'#remove(list=ls())
 #'#require(ExpImage)
-#'#require(EBImage)
 #'im=read_image(example_image(3))
 #'##mostrar imagem
 #'plot(im)
@@ -64,7 +63,8 @@
 
 
 split_image=function(im,Seg,noise=0,CutImage=TRUE,lim=10,tolerance=1,
-                     ext=1,splitConnected=FALSE,colorBack=c(0,0,0) ,saveImage=TRUE,
+                     ext=1,splitConnected=FALSE,colorBack=c(0,0,0) ,
+                     saveImage=TRUE,
                      plot=T,col="red",cex=1,
                      fileName="test.jpg"){
   r=colorBack[1]
@@ -77,7 +77,12 @@ split_image=function(im,Seg,noise=0,CutImage=TRUE,lim=10,tolerance=1,
   RES=NULL
   IIM=NULL
   SegplotR=SegplotG=SegplotB=SepSeg*0
-  for(j in 2:length(unique(c(SepSeg)))){
+
+  nn=length(unique(c(SepSeg)))
+  pb <- progress::progress_bar$new(total = nn)
+nomess=NULL
+  for(j in 2:nn){
+    pb$tick()
     i=unique(c(SepSeg))[j]
     #if((sum(SepSeg==i)<=noise)){print(sum(SepSeg==i))}
     if(sum(SepSeg==i)>noise){
@@ -85,7 +90,12 @@ split_image=function(im,Seg,noise=0,CutImage=TRUE,lim=10,tolerance=1,
       a=a+1
       imsep=extract_pixels(im,SepSeg==i,plot = F,valueSelect = c(r,g,b))
       if(saveImage==T){
-        if(CutImage==F){EBImage::writeImage(imsep,files=paste(a,fileName,sep="_"))}
+        if(CutImage==F){
+          #EBImage::writeImage(imsep,files=paste(a,fileName,sep="_"))
+          nomes=files=paste(a,fileName,sep="_")
+          EBImage::writeImage(imsep,files=nomes)
+          nomess=c(nomess,nomes)
+          }
         if(CutImage==T){
           seg=(SepSeg==i)*1
 
@@ -95,13 +105,15 @@ split_image=function(im,Seg,noise=0,CutImage=TRUE,lim=10,tolerance=1,
           idl[(round(lim/2,0)+1):(nl-round(lim/2,0))]=idl[(lim+1):nl]+idl[1:(nl-lim)]
 
           idc=colSums(seg)!=0
+          nl=length(idc)
           idc[(round(lim/2,0)+1):(nl-round(lim/2,0))]=idc[(lim+1):nl]+idc[1:(nl-lim)]
           imsep2=imsep
           imsep2@.Data=imsep@.Data[idl!=0,idc!=0,]
 
 
-
-          EBImage::writeImage(imsep2,files=paste(a,fileName,sep="_"))
+nomes=files=paste(a,fileName,sep="_")
+          EBImage::writeImage(imsep2,files =nomes)
+          nomess=rbind(nomess,nomes)
         }
       }
 
@@ -109,34 +121,21 @@ split_image=function(im,Seg,noise=0,CutImage=TRUE,lim=10,tolerance=1,
 
 
 
-      res=measure_image(SepSeg==i ,splitConnected = F,plot=F)
-      RES=rbind(RES,(res$measures))
 
-      SegplotR[SepSeg==i]=runif(1,0,1)
-      SegplotG[SepSeg==i]=runif(1,0,1)
-      SegplotB[SepSeg==i]=runif(1,0,1)
     }
 
 
   }
 
-  implot@.Data[,,1]=SegplotR
-  implot@.Data[,,2]=SegplotG
-  implot@.Data[,,3]=SegplotB
+  print("Arquivos criados (files created):")
+  print(nomess)
 
-  colnames(RES)= c( "m.cx"    ,  "m.cy" ,"s.area" ,"s.perimeter", "s.radius.mean" ,
-                    "s.radius.sd", "s.radius.min", "s.radius.max","m.majoraxis",
-                    "m.eccentricity"," m.theta")
-  RES=RES[RES[,3]>noise,]
- # print(noise)
+RES=measure_image(img = Seg,splitConnected =splitConnected,tolerance = tolerance
+                , noise=noise,ext = ext,plot = F )
 
-  rownames(RES)=1:nrow(RES)
-
-
-  if(plot==T){
-    plot_image(implot)
-    text(RES[,1],RES[,2],1:nrow(RES),cex=cex,col=col)
-  }
+if(plot==T){
+  plot_meansures(im,measurements = RES, text = rownames(RES$measures),col=col,cex=cex)
+}
 
   return(RES)
 }

@@ -19,6 +19,9 @@
 
 
 thinning_image <- function(x,plot=FALSE){
+ print("a")
+   class(x)="matrix"
+print("b")
   .lut1 <- function(){
     c(1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1,
       0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1,
@@ -56,7 +59,9 @@ thinning_image <- function(x,plot=FALSE){
       if (identical(x, x2)) break
       x <- x2
     }
-if(plot==T){plot_image(EBImage::as.Image((x)))}
+
+if(plot==T){plot_image(x)
+  }
     return(x)
   }
 

@@ -8,6 +8,8 @@
 setwd_script=function(){
   nome=rstudioapi::getSourceEditorContext()$path
   nome2=unlist(strsplit(nome,"/"))
-  setwd(paste(nome2[-length(nome2)], sep="/", collapse="/"))
+  nome3=paste(nome2[-length(nome2)], sep="/", collapse="/")
+  setwd(nome3)
+  nome3
 }
 

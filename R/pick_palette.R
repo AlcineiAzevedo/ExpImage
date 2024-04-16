@@ -76,12 +76,9 @@ if(!is.null(palette.previous)){
 D=rbind(D,D0)
 }
 
-seq=order(D[,1])
+seq=sample(nrow(D))
 D=D[seq,]
-seq=order(D[,2])
-D=D[seq,]
-seq=order(D[,3])
-D=D[seq,]
+
 
 n=nrow(D)
 

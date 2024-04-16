@@ -17,7 +17,7 @@
 #'  }
 #'
 #' @return Retorna a matriz normatizada.
-#' @seealso /code{/link{gray_scale}/}
+#' @seealso \code{\link{gray_scale}}
 #' @references
 #' PlayList "Curso de Analise Multivariada":
 #'  https://www.youtube.com/playlist?list=PLvth1ZcREyK72M3lFl7kBaHiVh5W53mlR
@@ -31,6 +31,7 @@
 #'  HAIR, J.F. Multivariate Data Analysis.  (2016) 6ed. Pearson Prentice HalL.
 #'   (ISBN 13:978 0138132637)
 #' @examples
+#' \donttest{
 #' end=example_image(2)
 #' ima=read_image(end,plot=TRUE)
 #' VARI=gray_scale(ima,method = "VARI",plot=TRUE)
@@ -41,6 +42,7 @@
 #' VARI2=Normatiza(VARIb,LimiteInferior=0, LimiteSuperior=1,Metodo=2)
 #' min(VARI2)
 #' max(VARI2)
+#' }
 
 #' @export
 
@@ -48,16 +50,18 @@
 
 
 
-Normatiza=function(DadosEntrada, DadosBase=NULL, LimiteInferior=0, LimiteSuperior=1,Metodo=1){
+Normatiza=function(DadosEntrada, DadosBase=NULL,
+                   LimiteInferior=0, LimiteSuperior=1,Metodo=1){
   if(suppressWarnings(class(DadosEntrada)[1]=="Distancia")){DadosEntrada=DadosEntrada$Distancia}
   if(suppressWarnings(class(DadosBase)[1]=="Distancia")){DadosBase=DadosBase$Distancia}
+  DadosEntrada[is.nan(DadosEntrada)]=NA
 
   #DadosEntrada=as.matrix(DadosEntrada)
   if(is.null(DadosBase)){DadosBase=DadosEntrada}
   #DadosBase=as.matrix(DadosBase)
   if(Metodo==1){
-  valMax = apply(DadosBase,2,max)
-  valMin = apply(DadosBase,2,min)
+  valMax = apply(DadosBase,2,max,na.omit=T)
+  valMin = apply(DadosBase,2,min,na.omit=T)
   valMax2=DadosEntrada
   valMin2=DadosEntrada
   Normatizado=DadosEntrada
@@ -72,10 +76,15 @@ Normatiza=function(DadosEntrada, DadosBase=NULL, LimiteInferior=0, LimiteSuperio
   }
 
   if(Metodo==2){
-    valMax = max(c(DadosBase))
-    valMin = min(c(DadosBase))
-    valMax2=max(c(DadosEntrada))
-    valMin2=min(c(DadosEntrada))
+    dbase=c(DadosBase)
+    dentrada=c(DadosEntrada)
+    dbase[is.infinite(dbase)]=NA
+    dentrada[is.infinite(dentrada)]=NA
+
+    valMax = max(dbase,na.rm=T)
+    valMin = min(dbase,na.rm=T)
+    valMax2=max(dentrada,na.rm=T)
+    valMin2=min(dentrada,na.rm=T)
 
     Normatizado=(LimiteSuperior - LimiteInferior)*(DadosEntrada- valMax2)/(valMax2- valMin2)
     Normatiza=Normatizado+LimiteSuperior
@@ -83,6 +92,6 @@ Normatiza=function(DadosEntrada, DadosBase=NULL, LimiteInferior=0, LimiteSuperio
 
 
   }
-  class(Normatiza)="matrix"
+  #class(Normatiza)="matrix"
   return(as.matrix(Normatiza))
 }

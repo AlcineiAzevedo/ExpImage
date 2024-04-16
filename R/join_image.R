@@ -1,7 +1,8 @@
 #' Join images(Juntar imagens)
 #'
 #' @description This function joins images by placing them side by side (Esta funcao junta imagens colocando uma do lado da outra).
-#' @usage join_image(im1=NULL,im2=NULL,im3=NULL,im4=NULL,im5=NULL,bk=c(1,1,1),plot=TRUE)
+#' @usage join_image(im1=NULL,im2=NULL,im3=NULL,im4=NULL,im5=NULL,bk=c(1,1,1),
+#' ncol=NULL,normalize=FALSE,plot=TRUE)
 
 #' @param im1    :Object containing an array, image in EBImage format or list of images
 #'  (Objeto contendo um array, imagem, ou lista de imagens no formato do EBImage).
@@ -15,7 +16,11 @@
 #'  (Objeto contendo um array, imagem, ou lista de imagens no formato do EBImage).
 #' @param bk :Vector white rgb values for background(Vetor contendo os valores de rgb
 #'  que serao considerados no background)
-#' @param plot    :Indicates whether the image will be displayed (TRUE) or not
+#' @param ncol    :Number of columns where images will appear in the chart (Numero de colunas em que as imagens aparecerao no grafico)
+#' @param normalize    :Logical value indicating whether the image needs to be normalized
+#'  (Valor logico indicando se a imagem precisa ser nomalizada)
+
+#' @param plot    :Logical value. Indicates whether the image will be displayed (TRUE) or not
 #'   (FALSE) (default) (Indica se sera apresentada (TRUE) ou nao (FALSE)
 #'   (default) a imagem segmentada).
 
@@ -74,10 +79,10 @@
 #'}
 #' @export
 # @exportS3Method print join_image
+#' @importFrom stats na.omit
 
 
-
-join_image=function(im1=NULL,im2=NULL,im3=NULL,im4=NULL,im5=NULL,bk=c(1,1,1),plot=TRUE){
+join_image=function(im1=NULL,im2=NULL,im3=NULL,im4=NULL,im5=NULL,bk=c(1,1,1), ncol=NULL,normalize=FALSE,plot=TRUE){
 
   if(EBImage::is.Image(im1)) im1=list(im1)
   if(EBImage::is.Image(im2)) im2=list(im2)
@@ -87,8 +92,10 @@ join_image=function(im1=NULL,im2=NULL,im3=NULL,im4=NULL,im5=NULL,bk=c(1,1,1),plo
   list1=list()
   list1=c(im1,im2,im3,im4,im5)
 
+
+
   nrow=NULL
-  ncol=NULL
+
 
   nn=length(list1)
   n=NULL
@@ -100,11 +107,27 @@ join_image=function(im1=NULL,im2=NULL,im3=NULL,im4=NULL,im5=NULL,bk=c(1,1,1),plo
 
   nn=nrow(n)
 
+
+
+  for(i in 1:length(list1)){
+   if(length(dim(list1[[i]]@.Data))==2){
+     list1[[i]]@.Data=array(c(list1[[i]]@.Data,list1[[i]]@.Data,list1[[i]]@.Data),dim =c(dim(list1[[i]]@.Data)[1],
+           dim(list1[[i]]@.Data)[2],3) )
+
+
+   }
+
+  }
+
+
   mat=array(grDevices::rgb(bk[1],bk[2],bk[3]),dim = c(apply(n,2,max),nrow(n)))
   for(i in 1:nn){
     if(!is.null(list1[[i]])){
-    mat[1:n[i,1],1:n[i,2],i]=raster::as.raster(list1[[i]])
-  }
+      EBImage::colorMode(list1[[i]])=as.integer(2)
+      list1[[i]]=(list1[[i]])
+      if(normalize==TRUE) list1[[i]]=EBImage::normalize(list1[[i]])
+      mat[1:n[i,1],1:n[i,2],i]=grDevices::rgb(red = list1[[i]]@.Data[,,1],green = list1[[i]]@.Data[,,2],blue = list1[[i]]@.Data[,,3])
+    }
 }
 
 
@@ -113,7 +136,7 @@ join_image=function(im1=NULL,im2=NULL,im3=NULL,im4=NULL,im5=NULL,bk=c(1,1,1),plo
       ncol=ceiling(sqrt(nn))
       nrow=ceiling(nn/ncol)
     }
-
+if(!is.null(ncol)){nrow=ceiling(nn/ncol)}
     op <- par(mfrow = c(nrow, ncol))
    # op
     for(i in 1:nn){

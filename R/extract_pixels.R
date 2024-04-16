@@ -34,7 +34,7 @@
 
 
 #' @examples
-#\donttest{
+#' \donttest{
 #'###########################################################################
 #'#Estimar a area atacada por doenca no tomateiro
 #'###########################################################################
@@ -79,8 +79,7 @@
 #'   folha,sample = 2000,fillHull = TRUE,TargetPixels =MatrizSegentada2==1
 #'   ,plot=TRUE)
 #'
-#'   im3=mask_pixels(im2,TargetPixels=DoencaSeg==1)
-#'    plot_image(im3)
+#'   im3=mask_pixels(im=im2,TargetPixels=DoencaSeg==1,col="red",plot=TRUE)
 #'
 #'   ii=join_image(im,im3,plot=TRUE)
 #'
@@ -88,7 +87,7 @@
 #'   #Porcentagem da area lesionada.
 #'
 #'   100*(sum(DoencaSeg)/sum(MatrizSegentada2))
-#}
+#' }
 #'@export
 #' @exportS3Method print extract_pixels
 
