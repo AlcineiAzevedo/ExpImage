@@ -32,6 +32,7 @@ Para isso, os valores das matrizes sao calculados a fim de variar entre um
 "LimiteInferior" e um "LimiteSuperior".
 }
 \examples{
+\donttest{
 end=example_image(2)
 ima=read_image(end,plot=TRUE)
 VARI=gray_scale(ima,method = "VARI",plot=TRUE)
@@ -42,6 +43,7 @@ max(VARIb)
 VARI2=Normatiza(VARIb,LimiteInferior=0, LimiteSuperior=1,Metodo=2)
 min(VARI2)
 max(VARI2)
+}
 }
 \references{
 PlayList "Curso de Analise Multivariada":
@@ -57,5 +59,5 @@ FERREIRA, D.F. Estatistica Multivariada. (2018) 3ed. UFLA. 624p. (ISBN 13:978 85
   (ISBN 13:978 0138132637)
 }
 \seealso{
-/code{/link{gray_scale}/}
+\code{\link{gray_scale}}
 }

@@ -6,12 +6,12 @@
 background ou foreground)}
 \usage{
 mask_pixels(im,TargetPixels,TargetPixels2=NULL,col.TargetPixels="rand",
-Contour=FALSE,plot=FALSE)
+Contour=FALSE, r = 1, g = 2, b = 3, norma = 1,plot=FALSE)
 }
 \arguments{
-\item{im}{:Este objeto deve conter uma imagem no formato do EBImage.}
+\item{im}{:This object must contain an image in EBImage format (Este objeto deve conter uma imagem no formato do EBImage).}
 
-\item{TargetPixels}{: Este objeto deve ser  uma matriz
+\item{TargetPixels}{: (Este objeto deve ser  uma matriz
 binaria ou uma lista com varias matrizes. Em cada matriz deve conter os valores 0 (pixels do background) ou 1 (pixels do
 foreground)).}
 
@@ -23,20 +23,31 @@ foreground)).}
 Pode tambem ser um vetor contendo os nomes das cores. Neste caso, o tamanho de vetor deve ser igual
 ao numero de matrizes.}
 
-\item{Contour}{Valor logico. Se for FALSE (default) sera a parte de interesse sera preenchida.
+\item{Contour}{: Valor logico. Se for FALSE (default) sera a parte de interesse sera preenchida.
 Se for TRUE a area de interesse sera contornada.}
+
+\item{r}{: Camada correspondente a banda de vermelho.}
+
+\item{g}{: Camada correspondente a banda de verde}
+
+\item{b}{= Camada correspondente a banda de azul}
+
+\item{norma}{= Valor a ser dividido em cada pixel para se ter valor entre 0 e 1.}
 
 \item{plot}{:Indica se sera apresentada (TRUE) ou nao (FALSE) (default) a
 imagem segmentada.}
 }
 \value{
 Retorna uma imagem com uma mascara sobre os  pixels selecionados.
+ @seealso  \code{\link{segmentation_logit}}
 }
 \description{
-Esta funcao permite criar mascara sobre os pixels
-  correspondentes ao background ou foreground
+This function superimposes a mask over the pixels corresponding to
+the background or foreground.(Esta funcao permite criar mascara sobre os pixels
+  correspondentes ao background ou foreground)
 }
 \examples{
+\donttest{
 ###########################################################################
 #Estimar a area atacada por doenca no tomateiro
 ###########################################################################
@@ -89,4 +100,5 @@ Esta funcao permite criar mascara sobre os pixels
   #Porcentagem da area lesionada.
 
   100*(sum(DoencaSeg)/sum(MatrizSegentada2))
+}
 }

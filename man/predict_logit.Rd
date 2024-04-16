@@ -37,7 +37,7 @@ prediction for segmentation considering the model adjusted by the
 'segmentation_logit' function).
 }
 \examples{
-
+\donttest{
 #Abrir imagem das folhas
 im=read_image(example_image(3),plot=TRUE)
 #Abrir paleta de cores do fundo
@@ -58,6 +58,7 @@ summary(Modelo)
 # Predicao a partir do modelo ajustado
 
 im2=predict_logit(im,Modelo,plot=TRUE)
+}
 }
 \seealso{
 \code{\link{segmentation_logit}}

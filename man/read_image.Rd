@@ -4,13 +4,19 @@
 \alias{read_image}
 \title{Function to import an image (Funcao para importa uma imagem).}
 \usage{
-read_image(file,plot=FALSE)
+read_image(file,plot=FALSE,norm=1)
 }
 \arguments{
 \item{file}{:Nome do arquivo ou endereco da imagem.}
 
 \item{plot}{:Indica se sera apresentada (TRUE) ou nao (FALSE) (default) a
 imagem}
+
+\item{norm}{: Indica o valor a partir do qual a matriz sera normatizada para
+variar entre 0 e 1. Ex.: Se os valores das matrizes variarem entre 0 e 255,
+a norma seria 255. Se for TRUE o menor valor da matriz sera convertido a zero,
+o maior para 1 e os demais serao intermediarios. Default = 1. Este parametro
+e util apenas quando as imagens carregadas sao da extensao tif.}
 }
 \value{
 Importa uma imagem.
@@ -20,7 +26,9 @@ Esta funcao importa uma imagem.
 }
 \examples{
 #Carregar imagem de exemplo
-im=read_image(example_image(1),plot=TRUE)
+End=example_image(1)
+im=read_image(End,plot=TRUE)
+
 }
 \seealso{
 \code{\link{crop_image}} , \code{\link{edit_image}}
