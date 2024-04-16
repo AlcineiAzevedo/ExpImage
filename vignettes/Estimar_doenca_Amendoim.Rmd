@@ -105,6 +105,9 @@ Para verificar se a classificação da área danificada está correta, podemos d
 
 ```{r}
 im3=mask_pixels(im,TargetPixels=MatrizSegmentada0.3==1,col.TargetPixels = "red",plot=F)
-im4=join_image(im,im3,plot=T)
+
+im3b=mask_pixels(im,TargetPixels=MatrizSegmentada0.3==1,Contour =TRUE,col.TargetPixels = "red",plot=F)
+
+im4=join_image(im,im3,im3b,plot=T)
 ```
 

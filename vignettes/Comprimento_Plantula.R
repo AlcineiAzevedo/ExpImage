@@ -5,7 +5,7 @@ knitr::opts_chunk$set(
 )
 
 ## -----------------------------------------------------------------------------
-# library(EBImage)
+
 library(ExpImage)
 
 ## -----------------------------------------------------------------------------
@@ -21,16 +21,19 @@ g=gray_scale(im,method = "g",plot=T)
 b=gray_scale(im,method = "b",plot=T)
 
 ## -----------------------------------------------------------------------------
+plot_indexes(im,NumberCores=2)
+
+## -----------------------------------------------------------------------------
 Seg=segmentation(b,treshold = 0.65,selectHigher = TRUE,fillHull = TRUE,plot = TRUE)
 
 ## -----------------------------------------------------------------------------
-radicula=thinning_image(Seg,plot = TRUE)
+radicula=thinning_image(Seg,plot = T)
 
 #Obtenção do comprimento da raiz em pixels
 sum(radicula)
 
 ## -----------------------------------------------------------------------------
-im2=mask_pixels(im,TargetPixels=radicula==1,plot=F)
+im2=mask_pixels(im,TargetPixels=radicula==1,col.TargetPixels = "red",plot=F)
 im3=join_image(im,im2,plot=T)
 
 ## -----------------------------------------------------------------------------
@@ -38,7 +41,7 @@ Seg2=segmentation(b,treshold = 0.5,selectHigher = FALSE,fillHull = TRUE,plot=TRU
 
 ## -----------------------------------------------------------------------------
 Seg2b=EBImage::erode(Seg2)
-EBImage::display(Seg2b)    
+plot_image(Seg2b)
 
 ## -----------------------------------------------------------------------------
 PA=thinning_image(Seg2b,plot = TRUE)
